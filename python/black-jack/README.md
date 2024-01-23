@@ -67,7 +67,7 @@ True
 ```
 
 Any ordered comparison of a number to a `NaN` (_not a number_) type is `False`.
-A confusing side-effect of Python's `NaN` definition is that `NaN` never compares equal to `NaN`.
+A confusing side effect of Python's `NaN` definition is that `NaN` never compares equal to `NaN`.
 
 ```python
 >>> x = float('NaN')
@@ -88,7 +88,7 @@ False
 Unlike numbers, strings (`str`) are compared [_lexicographically_][lexographic order], using their individual Unicode code points (_the result of passing each code point in the `str` to the built-in function [`ord()`][ord], which returns an `int`_).
 If all code points in both strings match and are _**in the same order**_, the two strings are considered equal.
 This comparison is done in a 'pair-wise' fashion - first-to-first, second-to-second, etc.
-Unlike in Python 2.x, in Python 3.x, `str` and `bytes` cannot be directly coerced/compared.
+In Python 3.x, `str` and `bytes` cannot be directly coerced/compared.
 
 ```python
 >>> 'Python' > 'Rust'
@@ -194,7 +194,6 @@ The operators `in` and `not in` test for _membership_.
 For string and bytes types, `<name> in <fullname>` is `True` _**if and only if**_ `<name>` is a substring of `<fullname>`.
 
 ```python
->>> 
 # A set of lucky numbers.
 >>> lucky_numbers = {11, 22, 33}
 >>> 22 in lucky_numbers
@@ -204,7 +203,9 @@ True
 False
 
 # A dictionary of employee information.
->>> employee = {'name': 'John Doe', 'id': 67826, 'age': 33, 'title': 'ceo'}
+>>> employee = {'name': 'John Doe', 
+                'id': 67826, 'age': 33, 
+                'title': 'ceo'}
 
 # Checking for the membership of certain keys.
 >>> 'age' in employee
