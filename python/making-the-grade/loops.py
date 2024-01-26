@@ -1,5 +1,13 @@
 """Functions for organizing and calculating student exam scores."""
 
+from typing import Final
+
+# Constants used in the program, obtain of the domain of the exercise
+FAIL_SCORE: Final[int] = 40
+NUMBER_OF_LETTER_GRADES: Final[int] = 4
+PERFECT: Final[int] = 100
+D_LOWER_THRESHOLD: Final[int] = 41
+
 
 def round_scores(student_scores: list[float]) -> list[int]:
     """Round all provided student scores.
@@ -7,10 +15,8 @@ def round_scores(student_scores: list[float]) -> list[int]:
     :param student_scores: list - float or int of student exam scores.
     :return: list - student scores *rounded* to nearest integer value.
     """
-    result: list[int] = []
-    for score in student_scores:
-        result.append(round(score))
-    return result
+
+    return [round(score) for score in student_scores]
 
 
 def count_failed_students(student_scores: list[int]) -> int:
@@ -19,12 +25,7 @@ def count_failed_students(student_scores: list[int]) -> int:
     :param student_scores: list - containing int student scores.
     :return: int - count of student scores at or below 40.
     """
-    number_of_failed_students = 0
-    fail_score = 40
-    for score in student_scores:
-        if score <= fail_score:
-            number_of_failed_students += 1
-    return number_of_failed_students
+    return sum([1 for score in student_scores if score <= FAIL_SCORE])
 
 
 def above_threshold(student_scores: list[int], threshold: int) -> list[int]:
@@ -51,20 +52,11 @@ def letter_grades(highest: int) -> list[int]:
             71 <= "B" <= 85
             86 <= "A" <= 100
     """
-
-    step = int((highest - 40)/4)
-    number_of_letter_grades = 4
-    lower_threshold: list[int] = []
-    for score in range(41,highest,step):
-        if len(lower_threshold) == number_of_letter_grades:
-            break
-        lower_threshold.append(score)
-    return lower_threshold
+    step = int((highest - FAIL_SCORE) / NUMBER_OF_LETTER_GRADES)
+    return [D_LOWER_THRESHOLD + step * _ for _ in range(NUMBER_OF_LETTER_GRADES)]
 
 
-
-
-def student_ranking(student_scores: list[int], student_names: list[str])-> list[str]:
+def student_ranking(student_scores, student_names) -> list[str]:
     """Organize the student's rank, name, and grade information in ascending order.
 
     :param student_scores: list - of scores in descending order.
@@ -72,15 +64,12 @@ def student_ranking(student_scores: list[int], student_names: list[str])-> list[
     :return: list - of strings in format ["<rank>. <student name>: <score>"].
     """
 
-    ranking = []
-    number_of_students = len(student_names)
-    for index in range(0,number_of_students):
-        rank = index + 1
-        student_name = student_names[index]
-        score = student_scores[index]
-        ranking_string = f"{rank}. {student_name}: {score}"
-        ranking.append(ranking_string)
-    return ranking
+    return [
+        f"{rank}. {name}: {score}"
+        for (rank, (name, score)) in enumerate(
+            zip(student_names, student_scores), start=1
+        )
+    ]
 
 
 def perfect_score(student_info):
@@ -89,9 +78,9 @@ def perfect_score(student_info):
     :param student_info: list - of [<student name>, <score>] lists.
     :return: list - first `[<student name>, 100]` or `[]` if no student score of 100 is found.
     """
+    student_score_index = 1
 
-    perfect = 100
     for student in student_info:
-        if student[1] == perfect:
+        if student[student_score_index] == PERFECT:
             return student
     return []
